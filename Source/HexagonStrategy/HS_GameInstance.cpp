@@ -484,7 +484,7 @@ void UHS_GameInstance::OnSearchSessionsComplete(bool bWasSuccessful)
 	}
 }
 
-UHexagonMgr* UHS_GameInstance::GetHexagonMrg()
+UHexagonMgr* UHS_GameInstance::GetHexagonMgr()
 {
 	if (HexagonMgr == nullptr)
 	{

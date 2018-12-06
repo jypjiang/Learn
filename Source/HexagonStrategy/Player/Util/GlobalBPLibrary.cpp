@@ -14,5 +14,5 @@ UHS_GameInstance* UGlobalBPLibrary::GetHS_GameInstance()
 
 UHexagonMgr* UGlobalBPLibrary::GetHexagonMgr()
 {
-	return UHS_GameInstance::GameInstance->GetHexagonMrg();
+	return UHS_GameInstance::GameInstance->GetHexagonMgr();
 }

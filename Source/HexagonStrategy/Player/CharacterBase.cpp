@@ -2,6 +2,7 @@
 
 #include "CharacterBase.h"
 #include "HexagonStrategy.h"
+#include "Player/AI/BotAIController.h"
 
 // Sets default values
 ACharacterBase::ACharacterBase()
@@ -15,6 +16,8 @@ ACharacterBase::ACharacterBase()
 // 	}
 // 	);
 	MyDelegate.AddUObject(this, &ACharacterBase::PrintLog1);
+	AIControllerClass = ABotAIController::StaticClass();
+//	BotController = GetController();
 	SetReplicates(true);
 }
 
@@ -22,8 +25,6 @@ ACharacterBase::ACharacterBase()
 void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-	TestObject = NewObject<UTestObject>();
-	TestObject->GetStr();
 }
 
 // Called every frame
@@ -92,6 +93,26 @@ void ACharacterBase::PrintLog2()
 {
 	A_LOG_1("Print Log 2");
 }
+
+void ACharacterBase::MoveToTarget()
+{
+	ABotAIController* BotController = Cast<ABotAIController>(GetController());
+	UHS_GameInstance* GameInstance = Cast<UHS_GameInstance>(GetWorld()->GetGameInstance());
+	GameInstance->GetHexagonMgr()->FindPath(Hexagon, TargetHexagon);
+	UE_LOG(LogTemp, Warning, TEXT("Path Num: %d"), GameInstance->GetHexagonMgr()->FindPath(Hexagon, TargetHexagon).Num());
+	for(int32 i = 0; i < GameInstance->GetHexagonMgr()->GetPath().Num(); ++i)
+	{
+		if(BotController)
+			BotController->MovePath.Add(GameInstance->GetHexagonMgr()->GetPath()[i]);
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Move Num: %d"), MovePath.Num());
+	//	BotController->MovePath = Cast<UHS_GameInstance>(GetWorld()->GetGameInstance())->GetHexagonMgr()->GetPath();
+// 	if (MovePath.Num() > 0)
+// 	{
+// 		BotController->PassHexagon(BotController->MovePath.Pop());
+// 	}
+}
+
 
 void ACharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {

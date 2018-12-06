@@ -4,8 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Test/TestObject.h"
+#include "Geometry/Hexagon.h"
+#include "HS_GameInstance.h"
+#include "HS_PlayerController.h"
 #include "CharacterBase.generated.h"
+
+class ABotAIController;
 
 DECLARE_MULTICAST_DELEGATE(FMyTestDelegate)
 
@@ -65,5 +69,25 @@ public:
 	FMyTestDelegate MyDelegate2;
 	FDelegateHandle DelHandle;
 
-	UTestObject* TestObject;
+	/** 当前的AI 控制器*/
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Characterbase")
+	//ABotAIController* BotController;
+
+	/** 脚下的格子*/
+	UPROPERTY()
+	AHexagon* Hexagon;
+
+	/** 移动的目标*/
+	UPROPERTY()
+	AHexagon* TargetHexagon;
+
+	/** 移动的路径*/
+	UPROPERTY()
+	TArray<AHexagon*> MovePath;
+
+public:
+
+	UFUNCTION()
+	void MoveToTarget();
+
 };
