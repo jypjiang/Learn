@@ -31,16 +31,11 @@ void AHS_PlayerController::SetupInputComponent()
 	Super::SetupInputComponent();
 	check(InputComponent);
 
-	InputComponent->BindKey(EKeys::LeftMouseButton, IE_Pressed, this, &AHS_PlayerController::LeftMouseClick);
 	InputComponent->BindAction("SelectActor", IE_Pressed, this, &AHS_PlayerController::SelectActor);
 	InputComponent->BindAction("SelectActor", IE_Released, this, &AHS_PlayerController::ClearSelect);
 	InputComponent->BindAction<FSpawnBotDelegate>("SpawnBot", IE_Pressed, this, &AHS_PlayerController::SpawnBot, BotClass, HexagonIns);
 }
 
-void AHS_PlayerController::LeftMouseClick()
-{
-	UE_LOG(LogTemp, Warning, TEXT("Left Mouse Click"));
-}
 
 void AHS_PlayerController::SelectActor()
 {
@@ -49,7 +44,6 @@ void AHS_PlayerController::SelectActor()
 	if (HitResult.Actor->GetClass()->IsChildOf(ACharacterBase::StaticClass()))
 	{
 		CurrentCharacter = Cast<ACharacterBase>(HitResult.Actor);
-		UE_LOG(LogTemp, Warning, TEXT("CurrentCharacter Hex Num: %d"), CurrentCharacter->Hexagon->Index);
 		bIsCanMove = true;
 	}
 	else if(HitResult.Actor->GetClass()->IsChildOf(AHexagon::StaticClass()))
@@ -58,7 +52,6 @@ void AHS_PlayerController::SelectActor()
 		{
 			if (CurrentCharacter)
 			{
-				UE_LOG(LogTemp, Warning, TEXT("Is Can Move "));
 				CurrentCharacter->TargetHexagon = Cast<AHexagon>(HitResult.Actor);
 				CurrentCharacter->MoveToTarget();
 				bIsCanMove = false;
@@ -83,7 +76,7 @@ void AHS_PlayerController::ClearSelect()
 	//HexagonIns = nullptr;
 }
 
-void AHS_PlayerController::SpawnBot(TSubclassOf<ACharacterBase> Bot, AHexagon* Hexagon)
+void AHS_PlayerController::SpawnBot_Implementation(TSubclassOf<ACharacterBase> Bot, AHexagon* Hexagon)
 {
 	if (HexagonIns)
 	{
@@ -91,8 +84,13 @@ void AHS_PlayerController::SpawnBot(TSubclassOf<ACharacterBase> Bot, AHexagon* H
 		SpawnParam.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 		ACharacterBase* TmpBot = GetWorld()->SpawnActor<ACharacterBase>(BotClass, HexagonIns->GetActorLocation(), HexagonIns->GetActorRotation(), SpawnParam);
 		//UHS_GameInstance* GameInstance = Cast<UHS_GameInstance>(GetWorld()->GetGameInstance());
-		TmpBot->Hexagon = HexagonIns;
+		TmpBot->CurrentHexagon = HexagonIns;
 		TmpBot->SpawnDefaultController();
 	}
 
+}
+
+bool AHS_PlayerController::SpawnBot_Validate(TSubclassOf<ACharacterBase> Bot, AHexagon* Hexagon)
+{
+	return true;
 }

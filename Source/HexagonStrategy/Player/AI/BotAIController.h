@@ -17,27 +17,23 @@ class HEXAGONSTRATEGY_API ABotAIController : public AAIController
 	
 public:
 
+	ABotAIController();
+
 	/** 移动的路径 */
 	UPROPERTY()
 	TArray<AHexagon*> MovePath;
 
-	ABotAIController();
 
 public:
 
 	virtual void OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult & Result) override;
 
-	/*
+	/* 
 	** 经过的每一个格子
 	** param Path: 下一个格子
 	*/
-	UFUNCTION(BlueprintCallable, Category = "Characterbase")
+	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "BotAICharacter")
 	void PassHexagon(AHexagon* Path);
 
-	/** 当前的格子 */
-	AHexagon* CurrentHexagon;
-	
-	/** 临时的格子 */
-	AHexagon* TmpHexagon;
 	 
 };

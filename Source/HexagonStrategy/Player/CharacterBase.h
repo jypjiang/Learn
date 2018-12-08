@@ -75,11 +75,14 @@ public:
 
 	/** 脚下的格子*/
 	UPROPERTY()
-	AHexagon* Hexagon;
+	AHexagon* CurrentHexagon;
 
 	/** 移动的目标*/
 	UPROPERTY()
 	AHexagon* TargetHexagon;
+
+	/** 移动路径上的小目标*/
+	AHexagon* LocalHexagon;
 
 	/** 移动的路径*/
 	UPROPERTY()
@@ -87,7 +90,7 @@ public:
 
 public:
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "CharacterBase")
 	void MoveToTarget();
 
 };

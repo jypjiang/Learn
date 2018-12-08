@@ -43,12 +43,8 @@ public:
 	virtual void SetupInputComponent() override;
 
 	/** 在PlayerState 中用会话名开始游戏 */
-	UFUNCTION(reliable, client)
+	UFUNCTION(Reliable, client)
 	void ClientStartOnlineGame();
-	
-	/** 左键点击事件*/
-	UFUNCTION()
-	void LeftMouseClick();
 
 	/** 选择Actor*/
 	UFUNCTION(BlueprintCallable, Category = "HS_PlayerCtrl")
@@ -67,7 +63,7 @@ public:
 	** 创建机器人
 	** @param Bot: 机器人类型
 	*/
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
 	void SpawnBot(TSubclassOf<ACharacterBase> Bot, AHexagon* Hexagon);
 
 };

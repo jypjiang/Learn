@@ -1,4 +1,4 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "HexagonMgr.h"
 #include "HS_GameInstance.h"
@@ -426,8 +426,8 @@ TArray<AHexagon*>& UHexagonMgr::FindPath(AHexagon* h1, AHexagon* h2)
 		MovePath.Add(TmpPtr->HexParent);
 		TmpPtr = TmpPtr->HexParent;
 	}
-	// 这里翻转一下
-	Algo::Reverse(MovePath);
+	// 这里翻转一下,不翻转的话，存取的数组要用Pop来取
+	// Algo::Reverse(MovePath);
 
 	ResetList();
 

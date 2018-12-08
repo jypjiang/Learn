@@ -5,22 +5,20 @@
 
 ABotAIController::ABotAIController()
 {
-
+	SetReplicates(true);
 }
 
 void ABotAIController::OnMoveCompleted(FAIRequestID RequestID, const FPathFollowingResult & Result)
 {
  	if (Result.Code == EPathFollowingResult::Success)
  	{
+		ACharacterBase* Character = Cast<ACharacterBase>(GetPawn());
+		if (Character->LocalHexagon)
+			Character->CurrentHexagon = Character->LocalHexagon;
 		if (MovePath.Num() > 0)
 		{
-			if (CurrentHexagon)
-			{
-				CurrentHexagon = TmpHexagon;
-				Cast<ACharacterBase>(GetPawn())->Hexagon = CurrentHexagon;
-			}
 			AHexagon* Hex = MovePath.Pop();
-			TmpHexagon = Hex;
+			Character->LocalHexagon = Hex;
 			PassHexagon(Hex);
 		}
 		
@@ -29,8 +27,13 @@ void ABotAIController::OnMoveCompleted(FAIRequestID RequestID, const FPathFollow
 }
 
 
-void ABotAIController::PassHexagon(AHexagon* Path)
+void ABotAIController::PassHexagon_Implementation(AHexagon* Path)
 {
 	//Cast<ACharacterBase>(GetPawn())->Hexagon = Path;
-	MoveToActor(Path, 5.f);
+	MoveToActor(Path, 1.f, false);
+}
+
+bool ABotAIController::PassHexagon_Validate(AHexagon* Path)
+{
+	return true;
 }

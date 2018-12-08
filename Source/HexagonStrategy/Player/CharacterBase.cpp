@@ -94,23 +94,30 @@ void ACharacterBase::PrintLog2()
 	A_LOG_1("Print Log 2");
 }
 
-void ACharacterBase::MoveToTarget()
+void ACharacterBase::MoveToTarget_Implementation()
 {
 	ABotAIController* BotController = Cast<ABotAIController>(GetController());
 	UHS_GameInstance* GameInstance = Cast<UHS_GameInstance>(GetWorld()->GetGameInstance());
-	GameInstance->GetHexagonMgr()->FindPath(Hexagon, TargetHexagon);
-	UE_LOG(LogTemp, Warning, TEXT("Path Num: %d"), GameInstance->GetHexagonMgr()->FindPath(Hexagon, TargetHexagon).Num());
-	for(int32 i = 0; i < GameInstance->GetHexagonMgr()->GetPath().Num(); ++i)
+	if (BotController)
 	{
-		if(BotController)
-			BotController->MovePath.Add(GameInstance->GetHexagonMgr()->GetPath()[i]);
+		if (BotController->MovePath.Num() > 0)
+			BotController->MovePath.Empty();
+		BotController->MovePath = GameInstance->GetHexagonMgr()->FindPath(CurrentHexagon, TargetHexagon);
+		if (BotController->MovePath.Num() > 0)
+		{
+			BotController->PassHexagon(BotController->MovePath.Pop());
+		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("Move Num: %d"), MovePath.Num());
 	//	BotController->MovePath = Cast<UHS_GameInstance>(GetWorld()->GetGameInstance())->GetHexagonMgr()->GetPath();
 // 	if (MovePath.Num() > 0)
 // 	{
 // 		BotController->PassHexagon(BotController->MovePath.Pop());
 // 	}
+}
+
+bool ACharacterBase::MoveToTarget_Validate()
+{
+	return true;
 }
 
 
