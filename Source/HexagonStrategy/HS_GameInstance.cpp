@@ -42,9 +42,9 @@ void UHS_GameInstance::Init()
 void UHS_GameInstance::Shutdown()
 {
 	Super::Shutdown();
+	//HexagonMgr->RemoveFromRoot();
 	GameInstance = nullptr;
 	FTicker::GetCoreTicker().RemoveTicker(TickDelegateHandle);
-	HexagonMgr->RemoveFromRoot();
 }
 
 // void UHS_GameInstance::StartGameInstance()
@@ -489,7 +489,7 @@ UHexagonMgr* UHS_GameInstance::GetHexagonMgr()
 	if (HexagonMgr == nullptr)
 	{
 		HexagonMgr = NewObject<UHexagonMgr>(this);
-		HexagonMgr->AddToRoot();
+		//HexagonMgr->AddToRoot();
 		HexagonMgr->SetGameInstance(this);
 	}	
 	return HexagonMgr;

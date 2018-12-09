@@ -27,11 +27,11 @@ public:
 	AHexagon* TargetHexagon;
 
 	/** 是否能行走 */
-	UPROPERTY(BlueprintReadWrite, Category = "HS_PlayerCtrl")
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "HS_PlayerCtrl")
 	bool bIsCanMove;
 
 	/** 当前选择的角色 */
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	ACharacterBase* CurrentCharacter;
 
 public:
@@ -47,23 +47,33 @@ public:
 	void ClientStartOnlineGame();
 
 	/** 选择Actor*/
-	UFUNCTION(BlueprintCallable, Category = "HS_PlayerCtrl")
+	UFUNCTION(BlueprintCallable)
 	void SelectActor();
+
+	/*
+	** 服务器对选择Actor的处理
+	** param 
+	*/
+	UFUNCTION(Reliable, Server, WithValidation, Category = "HS_PlayerCtrl")
+	void ServerSelectActor(AActor* SelectedActor);
 
 	UFUNCTION(BlueprintCallable, Category = "HS_PlayerCtrl")
 	void ClearSelect();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HS_PlayerCtrl")
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "HS_PlayerCtrl")
 	TSubclassOf<ACharacterBase> BotClass;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HS_PlayerCtrl")
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "HS_PlayerCtrl")
 	AHexagon* HexagonIns;
 
 	/*
 	** 创建机器人
 	** @param Bot: 机器人类型
 	*/
-	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation)
+	UFUNCTION(Server, Reliable, WithValidation, Category = "HS_PlayerCtrl")
+	void ServerSpawnBot(TSubclassOf<ACharacterBase> Bot, AHexagon* Hexagon);
+
+	UFUNCTION(BlueprintCallable)
 	void SpawnBot(TSubclassOf<ACharacterBase> Bot, AHexagon* Hexagon);
 
 };
