@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -62,12 +62,14 @@ public:
 	TArray<int32>& GetMoveScope(AHexagon* Hex, int32 Space);
 
 	/*
+	** PS: 临时使用
 	** 单边技能
 	** param h1: 起始点
 	** param h2: 目标点
+	** param Space: 离起始点的间隔
 	*/
 	UFUNCTION(BlueprintCallable, Category = "Hexagon")
-	TArray<AHexagon*>& GetSingleList(AHexagon* h1, AHexagon* h2);
+	TArray<AHexagon*>& GetSingleList(AHexagon* h1, AHexagon* h2, int32 Space);
 
 	/*
 	**  重置List

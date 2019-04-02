@@ -1,7 +1,8 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "CharacterBase.h"
 #include "HexagonStrategy.h"
+#include "HS_PlayerController.h"
 #include "Player/AI/BotAIController.h"
 
 // Sets default values
@@ -9,15 +10,8 @@ ACharacterBase::ACharacterBase()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-// 	MyDelegate = FMyTestDelegate::CreateLambda([this]()
-// 	{
-// 		A_LOG_1("MyDelegate Excute");
-// 		//MyDelegate = FMyTestDelegate();
-// 	}
-// 	);
-	MyDelegate.AddUObject(this, &ACharacterBase::PrintLog1);
 	AIControllerClass = ABotAIController::StaticClass();
-//	BotController = GetController();
+
 	SetReplicates(true);
 }
 
@@ -40,58 +34,16 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	check(PlayerInputComponent);
-	PlayerInputComponent->BindAction("Bind", IE_Pressed, this, &ACharacterBase::BindDelegate);
-	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ACharacterBase::CallDelegate);
-	PlayerInputComponent->BindAction("Call", IE_Pressed, this, &ACharacterBase::CallFunBind2);
 }
 
-
-FMyTestDelegate& ACharacterBase::CallFunBind1()
+void ACharacterBase::Attack_Implementation(ACharacterBase* Emeny)
 {
-	A_LOG_1("CallFunBind1");
-	return MyDelegate2;
+	
 }
 
-void ACharacterBase::CallFunBind2()
+bool ACharacterBase::Attack_Validate(ACharacterBase* Emeny)
 {
-	A_LOG_1("CallFunBind2");
-}
-
-void ACharacterBase::BindDelegate()
-{
-// 	MyDelegate = FMyTestDelegate::CreateLambda([this]()
-// 	{
-// 		A_LOG_1("MyDelegate Bind");
-// 		//MyDelegate = FMyTestDelegate();
-// 	}
-// 	);
-// 	if (MyDelegate.IsBound())
-// 	{
-// 		MyDelegate.Clear();
-// 	}
-// 
-// 	MyDelegate.AddUObject(this, &ACharacterBase::PrintLog2);
-	CallFunBind1().AddUObject(this, &ACharacterBase::CallFunBind2);
-}
-
-void ACharacterBase::CallDelegate()
-{
-	//MyDelegate.ExecuteIfBound();
-// 	if (MyDelegate.IsBound())
-// 	{
-// 		MyDelegate.Broadcast();
-// 	}
-	MyDelegate2.Broadcast();
-}
-
-void ACharacterBase::PrintLog1()
-{
-	A_LOG_1("Print Log 1");
-}
-
-void ACharacterBase::PrintLog2()
-{
-	A_LOG_1("Print Log 2");
+	return true;
 }
 
 void ACharacterBase::MoveToTarget_Implementation()
@@ -124,5 +76,7 @@ bool ACharacterBase::MoveToTarget_Validate()
 void ACharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(ACharacterBase, TestInt);
+
+	DOREPLIFETIME(ACharacterBase, CurrentState);
+	DOREPLIFETIME_CONDITION(ACharacterBase, ItemNum, COND_InitialOnly);
 }

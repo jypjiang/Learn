@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "HexagonMgr.h"
 #include "HS_GameInstance.h"
@@ -21,7 +21,7 @@ UWorld* UHexagonMgr::GetWorld() const
 
 TArray<AHexagon*> UHexagonMgr::HexGenerate(TSubclassOf<AHexagon> Hexagon, FVector Center, float size, int32 Row, int32 Col)
 {
-	int Index = 0;
+	int32 Index = 0;
 	HexSize = size;
 	HexRow = Row;
 	HexCol = Col;
@@ -243,6 +243,10 @@ TArray<int32>& UHexagonMgr::GetMoveScope(AHexagon* Hex, int32 Space)
 				{
 					int32 Row = k;
 					int32 Col = i + (k + (k & 1)) / 2;
+					if( Row < 0 || Row > HexRow)
+						continue;
+					if(Col < 0 || Col > HexCol)
+						continue;
 					int32 Index = Row * HexCol + Col;
 					if (Index >= 0 && Index < HexCol * HexRow && GetDistance(Hex, HexagonArr[Index]) <= Space)
 						MoveScope.Add(Index);
@@ -253,20 +257,123 @@ TArray<int32>& UHexagonMgr::GetMoveScope(AHexagon* Hex, int32 Space)
 	return MoveScope;
 }
 
-TArray<AHexagon*>& UHexagonMgr::GetSingleList(AHexagon* h1, AHexagon* h2)
+TArray<AHexagon*>& UHexagonMgr::GetSingleList(AHexagon* h1, AHexagon* h2, int32 Space)
 {
+// 	MovePath.Empty();
+// 	if (h1->Index < 0 || h2->Index < 0)
+// 		return MovePath;
+// 	FVector2D V1 = FVector2D(0, h2->GetActorLocation().Y - h1->GetActorLocation().Y);
+// 	FVector2D V2 = FVector2D(h2->GetActorLocation().X - h1->GetActorLocation().X, h2->GetActorLocation().Y - h1->GetActorLocation().Y);
+// 	float DotProduct = FVector2D::DotProduct(V1, V2);
+// 	//float DotProduct = FVector::DotProduct(h1->GetActorLocation(), h2->GetActorLocation());
+// 	float Deg = (180.f) / PI * FMath::Acos(DotProduct /(V1.Size() * V2.Size()));
+// 	UE_LOG(LogTemp, Warning, TEXT("Deg is %f"), Deg);
+// 	if ((Deg > 29.f && Deg < 31.f) || (Deg > -1.f && Deg < 1.f) || (Deg > 179.f && Deg < 181.f))
+// 		return FindPath(h1, h2);
+// 	else
+// 		return MovePath;
+
 	MovePath.Empty();
 	if (h1->Index < 0 || h2->Index < 0)
 		return MovePath;
-	FVector2D V1 = FVector2D(0, h2->GetActorLocation().Y - h1->GetActorLocation().Y);
-	FVector2D V2 = FVector2D(h2->GetActorLocation().X - h1->GetActorLocation().X, h2->GetActorLocation().Y - h1->GetActorLocation().Y);
-	float DotProduct = FVector2D::DotProduct(V1, V2);
-	//float DotProduct = FVector::DotProduct(h1->GetActorLocation(), h2->GetActorLocation());
-	float Deg = (180.f) / PI * FMath::Acos(DotProduct /(V1.Size() * V2.Size()));
-	UE_LOG(LogTemp, Warning, TEXT("Deg is %f"), Deg);
-	if ((Deg > 29.f && Deg < 31.f) || (Deg > -1.f && Deg < 1.f) || (Deg > 179.f && Deg < 181.f))
-		return FindPath(h1, h2);
-	else
+
+	if (h1->CoordinateX == h2->CoordinateY )
+	{
+		if (h1->CoordinateY < h2->CoordinateY)
+		{
+			for (int32 i = 1; i <= Space; ++i)
+			{
+				int32 TmpY = h1->CoordinateY + i;
+				int32 TmpZ = h1->CoordinateZ - i;
+				int32 TmpX = (TmpZ + TmpY) * -1;
+				int32 Row = TmpZ;
+				int32 Column = TmpX + (TmpZ + (TmpZ & 1)) / 2;
+				if(Row < 0  ||Row > HexRow || Column < 0 ||Column > HexCol)
+					break;
+				int32 Index = Row * HexCol + Column;
+				MovePath.Add(HexagonArr[Index]);		
+			}
+		}
+		else
+		{
+			for (int32 i = 1; i <= Space; ++i)
+			{
+				int32 TmpY = h1->CoordinateY - i;
+				int32 TmpZ = h1->CoordinateZ + i;
+				int32 TmpX = (TmpZ + TmpY) * -1;
+				int32 Row = TmpZ;
+				int32 Column = TmpX + (TmpZ + (TmpZ & 1)) / 2;
+				if (Row < 0 || Row > HexRow || Column < 0 || Column > HexCol)
+					break;
+				int32 Index = Row * HexCol + Column;
+				MovePath.Add(HexagonArr[Index]);
+			}
+		}
+	}
+	else if (h2->CoordinateY == h2->CoordinateY)
+	{
+		if (h1->CoordinateX < h2->CoordinateX)
+		{
+			for (int32 i = 1; i <= Space; ++i)
+			{
+				int32 TmpX = h1->CoordinateX + i;
+				int32 TmpZ = h1->CoordinateZ - i;
+				int32 Row = TmpZ;
+				int32 Column = TmpX + (TmpZ + (TmpZ & 1)) / 2;
+				if (Row < 0 || Row > HexRow || Column < 0 || Column > HexCol)
+					break;
+				int32 Index = Row * HexCol + Column;
+				MovePath.Add(HexagonArr[Index]);
+			}
+		}
+		else
+		{
+			for (int32 i = 1; i <= Space; ++i)
+			{
+				int32 TmpX = h1->CoordinateX - i;
+				int32 TmpZ = h1->CoordinateZ + i;
+				int32 Row = TmpZ;
+				int32 Column = TmpX + (TmpZ + (TmpZ & 1)) / 2;
+				if (Row < 0 || Row > HexRow || Column < 0 || Column > HexCol)
+					break;
+				int32 Index = Row * HexCol + Column;
+				MovePath.Add(HexagonArr[Index]);
+			}
+		}
+	}
+	else if (h2->CoordinateZ == h2->CoordinateZ)
+	{
+		if (h1->CoordinateX < h2->CoordinateX)
+		{
+			for (int32 i = 1; i <= Space; ++i)
+			{
+				int32 TmpX = h1->CoordinateX + i;
+				int32 TmpY = h1->CoordinateY - i;
+				int32 TmpZ = (TmpX + TmpY) * -1;
+				int32 Row = TmpZ;
+				int32 Column = TmpX + (TmpZ + (TmpZ & 1)) / 2;
+				if (Row < 0 || Row > HexRow || Column < 0 || Column > HexCol)
+					break;
+				int32 Index = Row * HexCol + Column;
+				MovePath.Add(HexagonArr[Index]);	
+			}
+		}
+		else
+		{
+			for (int32 i = 1; i <= Space; ++i)
+			{
+				int32 TmpX = h1->CoordinateX - i;
+				int32 TmpY = h1->CoordinateY + i;
+				int32 TmpZ = (TmpX + TmpY) * -1;
+				int32 Row = TmpZ;
+				int32 Column = TmpX + (TmpZ + (TmpZ & 1)) / 2;
+				if (Row < 0 || Row > HexRow || Column < 0 || Column > HexCol)
+					break;
+				int32 Index = Row * HexCol + Column;
+				MovePath.Add(HexagonArr[Index]);
+			}
+		}
+	}
 		return MovePath;
 }
 

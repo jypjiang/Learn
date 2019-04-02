@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -6,12 +6,18 @@
 #include "GameFramework/Character.h"
 #include "Geometry/Hexagon.h"
 #include "HS_GameInstance.h"
-#include "HS_PlayerController.h"
 #include "CharacterBase.generated.h"
 
 class ABotAIController;
 
-DECLARE_MULTICAST_DELEGATE(FMyTestDelegate)
+UENUM(BlueprintType)
+enum class ECharacterState :uint8
+{
+	ReadyState = 1 UMETA(DisplayName = "ReadyState"),
+	MoveState = 2 UMETA(DisplayName = "MoveState"),
+	AttackState = 4 UMETA(DisplayName = "AttackState"),
+	FinishState = 8 UMETA(DisplayName = "FinishState")
+};
 
 UCLASS()
 class HEXAGONSTRATEGY_API ACharacterBase : public ACharacter
@@ -21,19 +27,6 @@ class HEXAGONSTRATEGY_API ACharacterBase : public ACharacter
 public:
 	// Sets default values for this character's properties
 	ACharacterBase();
-
-	bool operator < (const ACharacterBase& C) const
-	{
-		if (TestOne == C.TestOne)
-		{
-			if (TestTwo == C.TestTwo)
-			{
-				return TestThree < C.TestThree;
-			}
-			return TestTwo < C.TestTwo;
-		}
-		return C.TestOne < C.TestOne;
-	}
 
 protected:
 	// Called when the game starts or when spawned
@@ -45,29 +38,7 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Test")
-	int32 TestInt;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Test")
-	int32 TestOne;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Test")
-	int32 TestTwo;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Test")
-	int32 TestThree;
 	
-	FMyTestDelegate& CallFunBind1();
-	void CallFunBind2();
-	void BindDelegate();
-	void CallDelegate();
-	void PrintLog1();
-	void PrintLog2();
-
-	FMyTestDelegate MyDelegate;
-	FMyTestDelegate MyDelegate2;
-	FDelegateHandle DelHandle;
 
 	/** 当前的AI 控制器*/
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Characterbase")
@@ -88,9 +59,24 @@ public:
 	UPROPERTY()
 	TArray<AHexagon*> MovePath;
 
+	/*
+	*	0：行动结束状态
+	*	1: 准备状态
+	*	2：可移动状态
+	*	4：可攻击状态
+	*/
+	UPROPERTY(BlueprintReadOnly, Replicated, Category = "CharacterBase")
+	uint8 CurrentState;
+
+	UPROPERTY(BlueprintReadOnly, Replicated, Category = "CharacterBase")
+	int32 ItemNum;
+
 public:
 
 	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "CharacterBase")
 	void MoveToTarget();
 
+
+	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "CharacterBase")
+	virtual void Attack(ACharacterBase* Emeny);
 };

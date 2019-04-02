@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -10,7 +10,7 @@
 
 class ACharacterBase;
 
-DECLARE_DELEGATE_TwoParams(FSpawnBotDelegate, TSubclassOf<ACharacterBase>, AHexagon*);
+DECLARE_DELEGATE_TwoParams(FSpawnBotDelegate, TSubclassOf<ACharacterBase>, AActor*);
 /**
  * 
  */
@@ -34,6 +34,9 @@ public:
 	UPROPERTY(Replicated)
 	ACharacterBase* CurrentCharacter;
 
+	// 控制的战棋
+	TArray<ACharacterBase*> CtrlCharacter;
+
 public:
 
 	AHS_PlayerController();
@@ -52,28 +55,44 @@ public:
 
 	/*
 	** 服务器对选择Actor的处理
-	** param 
+	** param: 选择的Actor 
 	*/
 	UFUNCTION(Reliable, Server, WithValidation, Category = "HS_PlayerCtrl")
 	void ServerSelectActor(AActor* SelectedActor);
 
+	/*
+	** 移动
+	** param: 选择的Actor
+	*/
+	UFUNCTION(Reliable, Server, WithValidation, Category = "HS_PlayerCtrl")
+	void Move(AActor* Hexagon);
+
+	/*
+	* 攻击敌人
+	* param: 选择的敌人
+	*/
+	UFUNCTION(Reliable, Server, WithValidation, Category = "HS_PlayerCtrl")
+	void AttackEnemy(ACharacterBase* Enemy);
+
 	UFUNCTION(BlueprintCallable, Category = "HS_PlayerCtrl")
 	void ClearSelect();
 
-	UPROPERTY(Replicated, BlueprintReadWrite, Category = "HS_PlayerCtrl")
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "HS_PlayerCtrl")
 	TSubclassOf<ACharacterBase> BotClass;
 
-	UPROPERTY(Replicated, BlueprintReadWrite, Category = "HS_PlayerCtrl")
-	AHexagon* HexagonIns;
+	// 当前选中的对象
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "HS_PlayerCtrl")
+	AActor* CurrentActor;
 
 	/*
 	** 创建机器人
 	** @param Bot: 机器人类型
 	*/
 	UFUNCTION(Server, Reliable, WithValidation, Category = "HS_PlayerCtrl")
-	void ServerSpawnBot(TSubclassOf<ACharacterBase> Bot, AHexagon* Hexagon);
+	void ServerSpawnBot(TSubclassOf<ACharacterBase> Bot, AActor* Hexagon);
 
 	UFUNCTION(BlueprintCallable)
-	void SpawnBot(TSubclassOf<ACharacterBase> Bot, AHexagon* Hexagon);
+	void SpawnBot(TSubclassOf<ACharacterBase> Bot, AActor* Hexagon);
+
 
 };
