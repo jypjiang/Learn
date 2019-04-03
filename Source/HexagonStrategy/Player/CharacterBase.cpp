@@ -13,6 +13,8 @@ ACharacterBase::ACharacterBase()
 	AIControllerClass = ABotAIController::StaticClass();
 
 	SetReplicates(true);
+
+	CurrentState = 7;
 }
 
 // Called when the game starts or when spawned
@@ -36,9 +38,46 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	check(PlayerInputComponent);
 }
 
+
+void ACharacterBase::TurnEnd_Implementation()
+{
+	CurrentState = 0;
+}
+
+bool ACharacterBase::TurnEnd_Validate()
+{
+	return true;
+}
+
+void ACharacterBase::TurnStart_Implementation()
+{
+	CurrentState = 7;
+}
+
+bool ACharacterBase::TurnStart_Validate()
+{
+	return true;
+}
+
+bool ACharacterBase::IsReadyState()
+{
+	return ((CurrentState & 0X1) == 1);
+}
+
+
+bool ACharacterBase::IsMoveState()
+{
+	return ((CurrentState & 0X2) == 1);
+}
+
+bool ACharacterBase::IsAttackState()
+{
+	return ((CurrentState & 0X4) == 1);
+}
+
 void ACharacterBase::Attack_Implementation(ACharacterBase* Emeny)
 {
-	
+	CurrentState = CurrentState & 0X7;
 }
 
 bool ACharacterBase::Attack_Validate(ACharacterBase* Emeny)
@@ -65,6 +104,7 @@ void ACharacterBase::MoveToTarget_Implementation()
 // 	{
 // 		BotController->PassHexagon(BotController->MovePath.Pop());
 // 	}
+	CurrentState = CurrentState & 0X7;
 }
 
 bool ACharacterBase::MoveToTarget_Validate()

@@ -74,9 +74,24 @@ public:
 public:
 
 	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "CharacterBase")
-	void MoveToTarget();
-
+	virtual void MoveToTarget();
 
 	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "CharacterBase")
 	virtual void Attack(ACharacterBase* Emeny);
+
+	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "CharacterBase")
+	virtual void TurnStart();
+
+	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "CharacterBase")
+	virtual void TurnEnd();
+
+	// 是否在准备阶段
+	bool IsReadyState();
+
+	// 是否可以移动
+	bool IsMoveState();
+
+	// 是否可以攻击
+	bool IsAttackState();
+
 };
