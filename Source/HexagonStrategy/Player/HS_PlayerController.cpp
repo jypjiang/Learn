@@ -7,6 +7,7 @@
 #include "Player/CharacterBase.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
+#include "Online/HS_PlayerState.h"
 
 AHS_PlayerController::AHS_PlayerController()
 {
@@ -64,12 +65,23 @@ bool AHS_PlayerController::Move_Validate(AActor* Hexagon)
 
 void AHS_PlayerController::ServerSelectActor_Implementation(AActor* SelectedActor)
 {
+	CurrentActor = SelectedActor;
 	if (SelectedActor->GetClass()->IsChildOf(ACharacterBase::StaticClass()))
 	{
 		ACharacterBase* CharacterBase = Cast<ACharacterBase>(SelectedActor);
-
-		CurrentCharacter = Cast<ACharacterBase>(SelectedActor);
-		CurrentActor = SelectedActor;
+		if (Cast<AHS_PlayerState>(PlayerState)->ItemNum == CharacterBase->ItemNum)
+		{
+			CurrentCharacter = CharacterBase;
+			CharacterBase->ShowInfo();
+		}
+		else
+		{
+			if(CurrentCharacter && CurrentCharacter->IsAttackState())
+			{
+				CurrentCharacter->Attack(Cast<AcharacterBase>(SelectActor));
+			}
+		}
+		
 	}
 	else if (SelectedActor->GetClass()->IsChildOf(AHexagon::StaticClass()))
 	{
@@ -89,8 +101,14 @@ void AHS_PlayerController::ServerSelectActor_Implementation(AActor* SelectedActo
 		//	if (UKismetSystemLibrary::IsValidClass(BotClass))
 		//		CurrentActor = Cast<AHexagon>(SelectedActor);
 		//}
-
-		CurrentActor = SelectedActor;
+		if (CurrentCharacter)
+		{
+			if (CurrentCharacter->IsMoveState())
+			{
+				CurrentCharacter->TargetHexagon = Cast<AHexagon>(CurrentActor);
+				CurrentCharacter->MoveToTarget();
+			}
+		}
 	}
 }
 

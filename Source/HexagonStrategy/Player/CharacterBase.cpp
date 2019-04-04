@@ -59,6 +59,11 @@ bool ACharacterBase::TurnStart_Validate()
 	return true;
 }
 
+bool ACharacterBase::IsCanAttack()
+{
+	return true;
+}
+
 bool ACharacterBase::IsReadyState()
 {
 	return ((CurrentState & 0X1) == 1);
@@ -67,12 +72,12 @@ bool ACharacterBase::IsReadyState()
 
 bool ACharacterBase::IsMoveState()
 {
-	return ((CurrentState & 0X2) == 1);
+	return (CurrentState & 0X2) == 1 && ((CurrentState & 0X1) == 1);
 }
 
 bool ACharacterBase::IsAttackState()
 {
-	return ((CurrentState & 0X4) == 1);
+	return (CurrentState & 0X4) == 1 && (CurrentState & 0X1) == 1;
 }
 
 void ACharacterBase::Attack_Implementation(ACharacterBase* Emeny)
@@ -110,6 +115,11 @@ void ACharacterBase::MoveToTarget_Implementation()
 bool ACharacterBase::MoveToTarget_Validate()
 {
 	return true;
+}
+
+void ACharacterBase::ShowInfo()
+{
+	
 }
 
 
