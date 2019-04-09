@@ -13,6 +13,11 @@ void AHS_PlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME(AHS_PlayerState, ItemNum);
 }
 
+AHS_PlayerState::AHS_PlayerState()
+{
+	ItemNum = 1;
+}
+
 void AHS_PlayerState::SetItemNum(int32 Num)
 {
 	ItemNum = Num;

@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "Geometry/Hexagon.h"
 #include "HS_GameInstance.h"
+#include "Player/Skill/SkillComponent.h"
+#include "Player/Skill/SkillConfig.h"
 #include "CharacterBase.generated.h"
 
 class ABotAIController;
@@ -39,6 +41,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "CharacterBase")
+	USkillComponent* SkillComp;
 
 	/** 当前的AI 控制器*/
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Characterbase")
@@ -68,15 +72,27 @@ public:
 	UPROPERTY(BlueprintReadOnly, Replicated, Category = "CharacterBase")
 	uint8 CurrentState;
 
+	// 队伍偏好
 	UPROPERTY(BlueprintReadOnly, Replicated, Category = "CharacterBase")
 	int32 ItemNum;
+
+	// 默认血量
+	UPROPERTY(BlueprintReadOnly, Replicated, Category = "CharacterBase")
+	int32 HP;
+
+	// 默认伤害
+	UPROPERTY(BlueprintReadOnly, Replicated, Category = "CharacterBase")
+	int32 Hurt;
+
+	UPROPERTY(BlueprintReadOnly, Replicated, Category = "CharacterBase")
+	ESkillType SkillType;
 
 public:
 
 	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "CharacterBase")
 	virtual void MoveToTarget();
 
-	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "CharacterBase")
+	UFUNCTION(BlueprintPure, Category = "CharacterBase")
 	bool IsCanAttack();
 
 	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "CharacterBase")

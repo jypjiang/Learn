@@ -78,10 +78,11 @@ void AHS_PlayerController::ServerSelectActor_Implementation(AActor* SelectedActo
 		{
 			if(CurrentCharacter && CurrentCharacter->IsAttackState())
 			{
-				CurrentCharacter->Attack(Cast<AcharacterBase>(SelectActor));
+				CurrentCharacter->Attack(Cast<ACharacterBase>(SelectedActor));
 			}
-		}
-		
+			else
+				CharacterBase->ShowInfo();
+		}		
 	}
 	else if (SelectedActor->GetClass()->IsChildOf(AHexagon::StaticClass()))
 	{

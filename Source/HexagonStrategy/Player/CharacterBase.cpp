@@ -15,6 +15,14 @@ ACharacterBase::ACharacterBase()
 	SetReplicates(true);
 
 	CurrentState = 7;
+	ItemNum = 1;
+	HP = 100;
+	Hurt = 20;
+
+	SkillComp = CreateDefaultSubobject<USkillComponent>(TEXT("SKillComp"));
+
+
+
 }
 
 // Called when the game starts or when spawned
@@ -72,12 +80,12 @@ bool ACharacterBase::IsReadyState()
 
 bool ACharacterBase::IsMoveState()
 {
-	return (CurrentState & 0X2) == 1 && ((CurrentState & 0X1) == 1);
+	return ((CurrentState & 0X2) == 2) && ((CurrentState & 0X1) == 1);
 }
 
 bool ACharacterBase::IsAttackState()
 {
-	return (CurrentState & 0X4) == 1 && (CurrentState & 0X1) == 1;
+	return ((CurrentState & 0X4) == 4) && ((CurrentState & 0X1) == 1);
 }
 
 void ACharacterBase::Attack_Implementation(ACharacterBase* Emeny)
@@ -104,7 +112,7 @@ void ACharacterBase::MoveToTarget_Implementation()
 			BotController->PassHexagon(BotController->MovePath.Pop());
 		}
 	}
-	//	BotController->MovePath = Cast<UHS_GameInstance>(GetWorld()->GetGameInstance())->GetHexagonMgr()->GetPath();
+//	BotController->MovePath = Cast<UHS_GameInstance>(GetWorld()->GetGameInstance())->GetHexagonMgr()->GetPath();
 // 	if (MovePath.Num() > 0)
 // 	{
 // 		BotController->PassHexagon(BotController->MovePath.Pop());
@@ -129,4 +137,7 @@ void ACharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 
 	DOREPLIFETIME(ACharacterBase, CurrentState);
 	DOREPLIFETIME_CONDITION(ACharacterBase, ItemNum, COND_InitialOnly);
+	DOREPLIFETIME_CONDITION(ACharacterBase, HP, COND_InitialOnly);
+	DOREPLIFETIME_CONDITION(ACharacterBase, Hurt, COND_InitialOnly);
+	DOREPLIFETIME_CONDITION(ACharacterBase, SkillType, COND_InitialOnly);
 }

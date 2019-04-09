@@ -14,7 +14,9 @@ class HEXAGONSTRATEGY_API AHS_PlayerState : public APlayerState
 {
 	GENERATED_BODY()
 	
-public:	
+public:
+
+	AHS_PlayerState();
 	
 	UPROPERTY(Replicated, Transient)
 	int32 ItemNum;
