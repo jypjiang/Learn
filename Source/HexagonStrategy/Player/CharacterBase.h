@@ -72,8 +72,8 @@ public:
 	UPROPERTY(BlueprintReadOnly, Replicated, Category = "CharacterBase")
 	uint8 CurrentState;
 
-	// 队伍偏好
-	UPROPERTY(BlueprintReadOnly, Replicated, Category = "CharacterBase")
+	// 队伍偏号
+	UPROPERTY(BlueprintReadOnly,EditAnywhere, Replicated, Category = "CharacterBase")
 	int32 ItemNum;
 
 	// 默认血量
@@ -95,8 +95,11 @@ public:
 	UFUNCTION(BlueprintPure, Category = "CharacterBase")
 	bool IsCanAttack();
 
+	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
+	virtual	void Attack(ACharacterBase* Emeny);
+
 	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "CharacterBase")
-	virtual void Attack(ACharacterBase* Emeny);
+	void ServerAttack(ACharacterBase* Emeny);
 
 	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "CharacterBase")
 	virtual void TurnStart();

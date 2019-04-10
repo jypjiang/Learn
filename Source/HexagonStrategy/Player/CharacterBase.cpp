@@ -72,6 +72,20 @@ bool ACharacterBase::IsCanAttack()
 	return true;
 }
 
+void ACharacterBase::Attack(ACharacterBase* Emeny)
+{
+	if (Role < ROLE_Authority)
+		ServerAttack(Emeny);
+
+	CurrentState = CurrentState & 0X7;
+	if (Emeny)
+	{
+		Emeny->HP = Emeny->HP - Hurt;
+		if (Emeny->HP <= 0)
+			Emeny->Destroy();	
+	}
+}
+
 bool ACharacterBase::IsReadyState()
 {
 	return ((CurrentState & 0X1) == 1);
@@ -88,12 +102,12 @@ bool ACharacterBase::IsAttackState()
 	return ((CurrentState & 0X4) == 4) && ((CurrentState & 0X1) == 1);
 }
 
-void ACharacterBase::Attack_Implementation(ACharacterBase* Emeny)
+void ACharacterBase::ServerAttack_Implementation(ACharacterBase* Emeny)
 {
-	CurrentState = CurrentState & 0X7;
+	Attack(Emeny);
 }
 
-bool ACharacterBase::Attack_Validate(ACharacterBase* Emeny)
+bool ACharacterBase::ServerAttack_Validate(ACharacterBase* Emeny)
 {
 	return true;
 }
