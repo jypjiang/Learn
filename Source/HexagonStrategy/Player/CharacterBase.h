@@ -6,8 +6,9 @@
 #include "GameFramework/Character.h"
 #include "Geometry/Hexagon.h"
 #include "HS_GameInstance.h"
-#include "Player/Skill/SkillComponent.h"
+#include "Player/Skill/HSGameplayAbility.h"
 #include "Player/Skill/SkillConfig.h"
+#include "Player/Skill/HSAbilitySystemComponent.h"
 #include "CharacterBase.generated.h"
 
 class ABotAIController;
@@ -41,8 +42,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "CharacterBase")
-	USkillComponent* SkillComp;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "CharacterBase")
+	UHSAbilitySystemComponent* GameplayAbilityComp;
 
 	/** 当前的AI 控制器*/
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Characterbase")
@@ -86,6 +87,15 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, Replicated, Category = "CharacterBase")
 	ESkillType SkillType;
+	
+	UPROPERTY(EditAnywhere, Replicated, Category = "CharacterBase")
+	int32 CharacterLevel;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Abilities")
+	TArray<TSubclassOf<UHSGameplayAbility>> GameplayAbilities;
+
+	UPROPERTY()
+	int32 bAbilitiesInitialized;
 
 public:
 
@@ -110,6 +120,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
 	void ShowInfo();
 
+	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
+	virtual int32 GetCharacterLevel() const;
+
+	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
+	virtual bool SetCharacterLevel(int32 NewLevel);
+
 	// 是否在准备阶段
 	bool IsReadyState();
 
@@ -118,5 +134,8 @@ public:
 
 	// 是否可以攻击
 	bool IsAttackState();
+
+	void AddStartupGameplayAbilities();
+
 
 };

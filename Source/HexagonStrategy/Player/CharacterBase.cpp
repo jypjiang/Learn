@@ -4,6 +4,7 @@
 #include "HexagonStrategy.h"
 #include "HS_PlayerController.h"
 #include "Player/AI/BotAIController.h"
+#include "GameplayAbilitySpec.h"
 
 // Sets default values
 ACharacterBase::ACharacterBase()
@@ -11,6 +12,7 @@ ACharacterBase::ACharacterBase()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	AIControllerClass = ABotAIController::StaticClass();
+	GameplayAbilityComp = CreateDefaultSubobject<UHSAbilitySystemComponent>(TEXT("GameplayAbilityComp"));
 
 	SetReplicates(true);
 
@@ -18,10 +20,7 @@ ACharacterBase::ACharacterBase()
 	ItemNum = 1;
 	HP = 100;
 	Hurt = 20;
-
-	SkillComp = CreateDefaultSubobject<USkillComponent>(TEXT("SKillComp"));
-
-
+	bAbilitiesInitialized = false;
 
 }
 
@@ -102,6 +101,21 @@ bool ACharacterBase::IsAttackState()
 	return ((CurrentState & 0X4) == 4) && ((CurrentState & 0X1) == 1);
 }
 
+void ACharacterBase::AddStartupGameplayAbilities()
+{
+	check(GameplayAbilityComp);
+
+	if (Role == ROLE_Authority && !bAbilitiesInitialized)
+	{
+		for (TSubclassOf<UHSGameplayAbility>& StartupAbility : GameplayAbilities)
+		{
+			GameplayAbilityComp->GiveAbility(FGameplayAbilitySpec(StartupAbility, GetCharacterLevel(), INDEX_NONE, this));
+		}
+
+		bAbilitiesInitialized = true;
+	}
+}
+
 void ACharacterBase::ServerAttack_Implementation(ACharacterBase* Emeny)
 {
 	Attack(Emeny);
@@ -144,6 +158,21 @@ void ACharacterBase::ShowInfo()
 	
 }
 
+
+int32 ACharacterBase::GetCharacterLevel() const
+{
+	return CharacterLevel;
+}
+
+bool ACharacterBase::SetCharacterLevel(int32 NewLevel)
+{
+	if (CharacterLevel != NewLevel && NewLevel)
+	{
+		CharacterLevel = NewLevel;
+		return true;
+	}
+	return false;
+}
 
 void ACharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
