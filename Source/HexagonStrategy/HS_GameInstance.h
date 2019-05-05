@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -7,6 +7,7 @@
 #include "OnlineSessionSettings.h"
 #include "Online/HS_GameSession.h"
 #include "Geometry/HexagonMgr.h"
+#include "Containers/Ticker.h"
 #include "HS_GameInstance.generated.h"
 
 struct FHexPendingInvite

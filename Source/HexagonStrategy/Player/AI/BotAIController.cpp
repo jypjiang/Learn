@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "BotAIController.h"
 
@@ -12,13 +12,13 @@ void ABotAIController::OnMoveCompleted(FAIRequestID RequestID, const FPathFollow
 {
  	if (Result.Code == EPathFollowingResult::Success)
  	{
-		ACharacterBase* Character = Cast<ACharacterBase>(GetPawn());
-		if (Character->LocalHexagon)
-			Character->CurrentHexagon = Character->LocalHexagon;
+		ACharacterBase* TmpCharacter = Cast<ACharacterBase>(GetPawn());
+		if (TmpCharacter->LocalHexagon)
+			TmpCharacter->CurrentHexagon = TmpCharacter->LocalHexagon;
 		if (MovePath.Num() > 0)
 		{
 			AHexagon* Hex = MovePath.Pop();
-			Character->LocalHexagon = Hex;
+			TmpCharacter->LocalHexagon = Hex;
 			PassHexagon(Hex);
 		}
 		

@@ -1,7 +1,7 @@
 {
-	"BuildId": "4212847",
+	"BuildId": "5660361",
 	"Modules": 
 	{
-		"HexagonStrategy": "UE4Editor-HexagonStrategy.dll"
+		"HexagonStrategy": "UE4Editor-HexagonStrategy-0003.dll"
 	}
 }

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+Ôªø// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "HS_GameSession.h"
 #include "HexagonStrategy.h"
@@ -26,9 +26,9 @@ AHS_GameSession::AHS_GameSession()
 }
 
 
-void AHS_GameSession::OnCreateSessionComplete(FName SessionName, bool bWasSuccessful)
+void AHS_GameSession::OnCreateSessionComplete(FName InSessionName, bool bWasSuccessful)
 {
-	UE_LOG(LogOnlineGame, Verbose, TEXT("OnCreateSessionComplete %s bSuccess: %d"), *SessionName.ToString(), bWasSuccessful);
+	UE_LOG(LogOnlineGame, Verbose, TEXT("OnCreateSessionComplete %s bSuccess: %d"), *InSessionName.ToString(), bWasSuccessful);
 
 	IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
 	if (OnlineSub)
@@ -36,10 +36,10 @@ void AHS_GameSession::OnCreateSessionComplete(FName SessionName, bool bWasSucces
 		IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
 		Sessions->ClearOnCreateSessionCompleteDelegate_Handle(OnCreateSessionCompleteDelegateHandle);
 	}
-	OnCreatePresenceSessionComplete().Broadcast(SessionName, bWasSuccessful);
+	OnCreatePresenceSessionComplete().Broadcast(InSessionName, bWasSuccessful);
 }
 
-void AHS_GameSession::OnStartOnlineGameComplete(FName SessionName, bool bWasSuccessful)
+void AHS_GameSession::OnStartOnlineGameComplete(FName InSessionName, bool bWasSuccessful)
 {
 	IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
 	if (OnlineSub)
@@ -53,17 +53,17 @@ void AHS_GameSession::OnStartOnlineGameComplete(FName SessionName, bool bWasSucc
 	{
 		for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It)
 		{
-			// ¥˝∂®
+			// ÂæÖÂÆö
 		}
 	}
 }
 
-bool AHS_GameSession::HostSession(TSharedPtr<const FUniqueNetId> UserId, FName SessionName, const FString& GameType, const FString& MapName, bool bIsLAN, bool bIsPresence, int32 MaxNumPlayers)
+bool AHS_GameSession::HostSession(TSharedPtr<const FUniqueNetId> UserId, FName InSessionName, const FString& GameType, const FString& MapName, bool bIsLAN, bool bIsPresence, int32 MaxNumPlayers)
 {
 	IOnlineSubsystem* const OnlineSub = IOnlineSubsystem::Get();
 	if (OnlineSub)
 	{
-		CurrentSessionParams.SessionName = SessionName;
+		CurrentSessionParams.SessionName = InSessionName;
 		CurrentSessionParams.bIsLAN = bIsLAN;
 		CurrentSessionParams.bIsPresence = bIsPresence;
 		CurrentSessionParams.UserId = UserId;
@@ -98,14 +98,14 @@ bool AHS_GameSession::HostSession(TSharedPtr<const FUniqueNetId> UserId, FName S
 	return false;
 }
 
-bool AHS_GameSession::HostSession(const TSharedPtr<const FUniqueNetId> UserId, const FName SessionName, const FOnlineSessionSettings& SessionSettings)
+bool AHS_GameSession::HostSession(const TSharedPtr<const FUniqueNetId> UserId, const FName InSessionName, const FOnlineSessionSettings& SessionSettings)
 {
 	bool bResult = false;
 
 	IOnlineSubsystem* const OnlineSub = IOnlineSubsystem::Get();
 	if (OnlineSub)
 	{
-		CurrentSessionParams.SessionName = SessionName;
+		CurrentSessionParams.SessionName = InSessionName;
 		CurrentSessionParams.bIsLAN = SessionSettings.bIsLANMatch;
 		CurrentSessionParams.bIsPresence = SessionSettings.bUsesPresence;
 		CurrentSessionParams.UserId = UserId;
@@ -121,12 +121,12 @@ bool AHS_GameSession::HostSession(const TSharedPtr<const FUniqueNetId> UserId, c
 	return bResult;
 }
 
-void AHS_GameSession::FindSessions(TSharedPtr<const FUniqueNetId> UserId, FName SessionName, bool bIsLAN, bool bIsPresence)
+void AHS_GameSession::FindSessions(TSharedPtr<const FUniqueNetId> UserId, FName InSessionName, bool bIsLAN, bool bIsPresence)
 {
 	IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
 	if (OnlineSub)
 	{
-		CurrentSessionParams.SessionName = SessionName;
+		CurrentSessionParams.SessionName = InSessionName;
 		CurrentSessionParams.bIsLAN = bIsLAN;
 		CurrentSessionParams.bIsPresence = bIsPresence;
 		CurrentSessionParams.UserId = UserId;
@@ -147,16 +147,16 @@ void AHS_GameSession::FindSessions(TSharedPtr<const FUniqueNetId> UserId, FName 
 		OnFindSessionsComplete(false);
 }
 
-bool AHS_GameSession::JoinSession(TSharedPtr<const FUniqueNetId> UserId, FName SessionName, int32 SessionIndexSearchResults)
+bool AHS_GameSession::JoinSession(TSharedPtr<const FUniqueNetId> UserId, FName InSessionName, int32 SessionIndexSearchResults)
 {
 	bool bResult = false;
 	
 	if (SessionIndexSearchResults >= 0 && SessionIndexSearchResults < SearchSettings->SearchResults.Num())
-		bResult = JoinSession(UserId, SessionName, SearchSettings->SearchResults[SessionIndexSearchResults]);
+		bResult = JoinSession(UserId, InSessionName, SearchSettings->SearchResults[SessionIndexSearchResults]);
 	return bResult;
 }
 
-bool AHS_GameSession::JoinSession(TSharedPtr<const FUniqueNetId> UserId, FName SessionName, const FOnlineSessionSearchResult& SerachResult)
+bool AHS_GameSession::JoinSession(TSharedPtr<const FUniqueNetId> UserId, FName InSessionName, const FOnlineSessionSearchResult& SerachResult)
 {
 	bool bResult = false;
 
@@ -167,7 +167,7 @@ bool AHS_GameSession::JoinSession(TSharedPtr<const FUniqueNetId> UserId, FName S
 		if (Sessions.IsValid() && UserId.IsValid())
 		{
 			OnJoinSessionCompleteDelegateHandle = Sessions->AddOnJoinSessionCompleteDelegate_Handle(OnJoinSessionCompleteDelegate);
-			bResult = Sessions->JoinSession(*UserId, SessionName, SerachResult);
+			bResult = Sessions->JoinSession(*UserId, InSessionName, SerachResult);
 		}
 	}
 	return bResult;
@@ -219,11 +219,11 @@ const TArray<FOnlineSessionSearchResult>& AHS_GameSession::GetSearchResults() co
 	return SearchSettings->SearchResults;
 }
 
-void AHS_GameSession::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
+void AHS_GameSession::OnJoinSessionComplete(FName InSessionName, EOnJoinSessionCompleteResult::Type Result)
 {
 	bool bWillTravel = false;
 
-	UE_LOG(LogTemp, Warning, TEXT("OnJoinSessionComplete %s bSuccess: %d"), *SessionName.ToString(), static_cast<int32>(Result));
+	UE_LOG(LogTemp, Warning, TEXT("OnJoinSessionComplete %s bSuccess: %d"), *InSessionName.ToString(), static_cast<int32>(Result));
 
 	IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
 	IOnlineSessionPtr Sessions = NULL;
@@ -236,9 +236,9 @@ void AHS_GameSession::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCom
 	OnJoinSessionComplete().Broadcast(Result);
 }
 
-void AHS_GameSession::OnDestroySessionComplete(FName SessionName, bool bWasSuccessful)
+void AHS_GameSession::OnDestroySessionComplete(FName InSessionName, bool bWasSuccessful)
 {
-	UE_LOG(LogTemp, Warning, TEXT("OnDestroySessionComplete %s bSuccess: %d"), *SessionName.ToString(), bWasSuccessful);
+	UE_LOG(LogTemp, Warning, TEXT("OnDestroySessionComplete %s bSuccess: %d"), *InSessionName.ToString(), bWasSuccessful);
 
 	IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
 	if (OnlineSub)
@@ -256,10 +256,10 @@ void AHS_GameSession::ResetBestSessionVars()
 
 void AHS_GameSession::ChooseBestSession()
 {
-	// ¥”…œ¥ŒµƒŒª÷√ø™ º’“
+	// ‰ªé‰∏äÊ¨°ÁöÑ‰ΩçÁΩÆÂºÄÂßãÊâæ
 	for (int32 SessionIndex = CurrentSessionParams.BestSessionIdx + 1; SessionIndex < SearchSettings->SearchResults.Num(); SessionIndex++)
 	{
-		// —°‘ÒœÎ“™µƒµƒ∆•≈‰
+		// ÈÄâÊã©ÊÉ≥Ë¶ÅÁöÑÁöÑÂåπÈÖç
 		CurrentSessionParams.BestSessionIdx = SessionIndex;
 		return;
 	}
@@ -346,7 +346,7 @@ void AHS_GameSession::OnFindSessionsComplete(bool bWasSuccessful)
 
 void AHS_GameSession::HandleMatchHasStarted()
 {
-	// ‘⁄±æµÿ∆Ù∂Ø‘⁄œﬂ”Œœ∑≤¢µ»¥˝ÕÍ≥…
+	// Âú®Êú¨Âú∞ÂêØÂä®Âú®Á∫øÊ∏∏ÊàèÂπ∂Á≠âÂæÖÂÆåÊàê
 	IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
 	if (OnlineSub)
 	{
@@ -362,40 +362,40 @@ void AHS_GameSession::HandleMatchHasStarted()
 
 void AHS_GameSession::HandleMatchHasEnded()
 {
-	// Ω· ¯±æµÿ”Œœ∑
+	// ÁªìÊùüÊú¨Âú∞Ê∏∏Êàè
 	IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
 	if (OnlineSub)
 	{
 		IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
 		if (Sessions.IsValid() && (Sessions->GetNamedSession(NAME_GameSession) != nullptr))
 		{
-			// ∏ÊÀﬂøÕªß∂ÀΩ· ¯¡À
+			// ÂëäËØâÂÆ¢Êà∑Á´ØÁªìÊùü‰∫Ü
 			for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It)
 			{
-				// ¥˝∂®
+				// ÂæÖÂÆö
 			}
 
-			// ∑˛ŒÒ∆˜¥¶¿Ì
+			// ÊúçÂä°Âô®Â§ÑÁêÜ
 			UE_LOG(LogTemp, Warning, TEXT("Ending session %s on server"), *FName(NAME_GameSession).ToString());
 			Sessions->EndSession(NAME_GameSession);
 		}
 	}
 }
 
-bool AHS_GameSession::TravelToSession(int32 ControllerId, FName SessionName)
+bool AHS_GameSession::TravelToSession(int32 ControllerId, FName InSessionName)
 {
 	IOnlineSubsystem* OnlineSub = IOnlineSubsystem::Get();
 	if (OnlineSub)
 	{
 		FString URL;
 		IOnlineSessionPtr Sessions = OnlineSub->GetSessionInterface();
-		if (Sessions.IsValid() && Sessions->GetResolvedConnectString(SessionName, URL))
+		if (Sessions.IsValid() && Sessions->GetResolvedConnectString(InSessionName, URL))
 		{
-			// ¥˝∂®
+			// ÂæÖÂÆö
 		}
 		else
 		{
-			UE_LOG(LogOnlineGame, Warning, TEXT("Failed to join session %s"), *SessionName.ToString());
+			UE_LOG(LogOnlineGame, Warning, TEXT("Failed to join session %s"), *InSessionName.ToString());
 		}
 	}
 

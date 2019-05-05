@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -10,15 +10,15 @@
 
 struct FHSGameSessionParams
 {
-	// ´æ´¢ÔÚSession ÉèÖÃÀïµÄÃû×Ö
+	// å­˜å‚¨åœ¨Session è®¾ç½®é‡Œçš„åå­—
 	FName SessionName;
-	// ÊÇ·ñ¾ÖÓòÍø
+	// æ˜¯å¦å±€åŸŸç½‘
 	bool bIsLAN;
-	// ÊÇ·ñÈÃ±ğÈË¿´µ½/¼ÓÈë
+	// æ˜¯å¦è®©åˆ«äººçœ‹åˆ°/åŠ å…¥
 	bool bIsPresence;
-	// Íæ¼Ò¼ÓÈë´óÌüµÄId
+	// ç©å®¶åŠ å…¥å¤§å…çš„Id
 	TSharedPtr<const FUniqueNetId> UserId;
-	// µ±Ç°ËÑË÷½á¹ûÑ¡Ôñ¼ÓÈë
+	// å½“å‰æœç´¢ç»“æœé€‰æ‹©åŠ å…¥
 	int32 BestSessionIdx;
 
 	FHSGameSessionParams()
@@ -39,111 +39,111 @@ class HEXAGONSTRATEGY_API AHS_GameSession : public AGameSession
 
 public:
 
-	// ËÑË÷Íê³É
+	// æœç´¢å®Œæˆ
 	bool bIsSearchFinish;
 
 protected:
 
-	// ´´½¨ĞÂSession Î¯ÍĞ
+	// åˆ›å»ºæ–°Session å§”æ‰˜
 	FOnCreateSessionCompleteDelegate OnCreateSessionCompleteDelegate;
-	// ¿ªÊ¼Session Ö®ºóµÄÎ¯ÍĞ
+	// å¼€å§‹Session ä¹‹åçš„å§”æ‰˜
 	FOnStartSessionCompleteDelegate OnStartSessionCompleteDelegate;
-	// É¾³ıSession Î¯ÍĞ
+	// åˆ é™¤Session å§”æ‰˜
 	FOnDestroySessionCompleteDelegate OnDestroySessionCompleteDelegate;
-	// ËÑË÷Session Î¯ÍĞ
+	// æœç´¢Session å§”æ‰˜
 	FOnFindSessionsCompleteDelegate OnFindSessionsCompleteDelegate;
-	// ¼ÓÈëSession Ö®ºóµÄÎ¯ÍĞ
+	// åŠ å…¥Session ä¹‹åçš„å§”æ‰˜
 	FOnJoinSessionCompleteDelegate OnJoinSessionCompleteDelegate;
 
-	// ÓÎÏ·ÔÚ´´½¨/Æ¥Åä¹ı³ÌÖĞµÄË²¼äÌØĞÔµÄSession
+	// æ¸¸æˆåœ¨åˆ›å»º/åŒ¹é…è¿‡ç¨‹ä¸­çš„ç¬é—´ç‰¹æ€§çš„Session
 	FHSGameSessionParams CurrentSessionParams;
-	// µ±Ç°Ö÷»úÉèÖÃ
+	// å½“å‰ä¸»æœºè®¾ç½®
 	TSharedPtr<class FHSOnlineSessionSettings> HostSettings;
-	// µ±Ç°ËÑË÷ÉèÖÃ
+	// å½“å‰æœç´¢è®¾ç½®
 	TSharedPtr<class FHSOnlineSearchSettings> SearchSettings;
 
 
 	/**
-	* µ± Session ÇëÇóÍê³ÉÊ±´¥·¢
-	* @param SesssionName		»Øµ÷µÄSession Ãû
-	* @param bWasSuccessful		Èç¹ûÒì²½²Ù×÷Íê³ÉÔòÕıÈ·£¬·ñÔò´íÎó
+	* å½“ Session è¯·æ±‚å®Œæˆæ—¶è§¦å‘
+	* @param SesssionName		å›è°ƒçš„Session å
+	* @param bWasSuccessful		å¦‚æœå¼‚æ­¥æ“ä½œå®Œæˆåˆ™æ­£ç¡®ï¼Œå¦åˆ™é”™è¯¯
 	*/
-	virtual void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
+	virtual void OnCreateSessionComplete(FName InSessionName, bool bWasSuccessful);
 
 	/**
-	* µ±Session ¿ªÊ¼Ê±´¥·¢
-	* @param SesssionName		»Øµ÷µÄSession Ãû
-	* @param bWasSuccessful		Èç¹ûÒì²½²Ù×÷Íê³ÉÔòÕıÈ·£¬·ñÔò´íÎó
+	* å½“Session å¼€å§‹æ—¶è§¦å‘
+	* @param SesssionName		å›è°ƒçš„Session å
+	* @param bWasSuccessful		å¦‚æœå¼‚æ­¥æ“ä½œå®Œæˆåˆ™æ­£ç¡®ï¼Œå¦åˆ™é”™è¯¯
 	*/
-	void OnStartOnlineGameComplete(FName SessionName, bool bWasSuccessful);
+	void OnStartOnlineGameComplete(FName InSessionName, bool bWasSuccessful);
 
 	/**
-	* µ±ËÑË÷Íê³ÉÊ±´¥·¢
-	* @param bWasSuccessful		Èç¹ûÒì²½²Ù×÷Íê³ÉÔòÕıÈ·£¬·ñÔò´íÎó
+	* å½“æœç´¢å®Œæˆæ—¶è§¦å‘
+	* @param bWasSuccessful		å¦‚æœå¼‚æ­¥æ“ä½œå®Œæˆåˆ™æ­£ç¡®ï¼Œå¦åˆ™é”™è¯¯
 	*/
 	void OnFindSessionsComplete(bool bWasSuccessful);
 
 	/**
-	* µ±¼ÓÈëSession Ê±´¥·¢
-	* @param SesssionName		»Øµ÷µÄSession Ãû
-	* @param Result				¼ÓÈëµÄ½á¹û
+	* å½“åŠ å…¥Session æ—¶è§¦å‘
+	* @param SesssionName		å›è°ƒçš„Session å
+	* @param Result				åŠ å…¥çš„ç»“æœ
 	*/
-	void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
+	void OnJoinSessionComplete(FName InSessionName, EOnJoinSessionCompleteResult::Type Result);
 
 	/**
-	* @param SesssionName		»Øµ÷µÄSession Ãû
-	* @param bWasSuccessful		Èç¹ûÒì²½²Ù×÷Íê³ÉÔòÕıÈ·£¬·ñÔò´íÎó
+	* @param SesssionName		å›è°ƒçš„Session å
+	* @param bWasSuccessful		å¦‚æœå¼‚æ­¥æ“ä½œå®Œæˆåˆ™æ­£ç¡®ï¼Œå¦åˆ™é”™è¯¯
 	*/
-	virtual void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
+	virtual void OnDestroySessionComplete(FName InSessionName, bool bWasSuccessful);
 
 	/**
-	* ÖØÖÃ±äÁ¿£¬±£³ÖSession µÄÁ¬½Ó³¢ÊÔ
+	* é‡ç½®å˜é‡ï¼Œä¿æŒSession çš„è¿æ¥å°è¯•
 	*/
 	void ResetBestSessionVars();
 
 	/**
-	* ´ÓÓÎÏ·±ê×¼ËÑË÷ÁĞ±íÖĞÑ¡ÔñÒ»¸ö×îºÃµÄSession
+	* ä»æ¸¸æˆæ ‡å‡†æœç´¢åˆ—è¡¨ä¸­é€‰æ‹©ä¸€ä¸ªæœ€å¥½çš„Session
 	*/
 	void ChooseBestSession();
 
 	/**
-	* ¿ªÊ¼Æ¥Åä
+	* å¼€å§‹åŒ¹é…
 	*/
 	void StartMatchmaking();
 
 	/**
-	* Ã¿´Î³¢ÊÔ¼ÓÈëËÑË÷½á¹ûºóµÄ·µ»Øµã
+	* æ¯æ¬¡å°è¯•åŠ å…¥æœç´¢ç»“æœåçš„è¿”å›ç‚¹
 	*/
 	void ContinuneMatchmaking();
 
 	/**
-	* µ±Ã»ÓĞ¸ü¶àËÑË÷½á¹ûÊ±´¥·¢Î¯ÍĞ
+	* å½“æ²¡æœ‰æ›´å¤šæœç´¢ç»“æœæ—¶è§¦å‘å§”æ‰˜
 	*/
 	void OnNoMatchesAvailable();
 
 	/**
-	* µ±Õâ¸öÊµÀı×÷Îª×¨ÓÃ·şÎñÆ÷Æô¶¯Ê±µ÷ÓÃ
+	* å½“è¿™ä¸ªå®ä¾‹ä½œä¸ºä¸“ç”¨æœåŠ¡å™¨å¯åŠ¨æ—¶è°ƒç”¨
 	*/
 	virtual void RegisterServer() override;
 
 	/**
-	* ´´½¨´æÔÚSession Ê±´¥·¢ÊÂ¼ş
-	* @param SessionName		Session´´½¨
-	* @param bWasSuccessful		ÊÇ·ñ´´½¨³É¹¦
+	* åˆ›å»ºå­˜åœ¨Session æ—¶è§¦å‘äº‹ä»¶
+	* @param SessionName		Sessionåˆ›å»º
+	* @param bWasSuccessful		æ˜¯å¦åˆ›å»ºæˆåŠŸ
 	*/
 	DECLARE_EVENT_TwoParams(AHS_GameSession, FOnCreatePresenceSessionComplete, FName /*SessionName*/, bool /*bWasSuccessful*/);
 	FOnCreatePresenceSessionComplete CreatePresenceSessionCompleteEvent;
 
 	/**
-	* ¼ÓÈëSession Ê±´¥·¢ÊÂ¼ş
-	* @param Result ·µ»Ø½á¹û
+	* åŠ å…¥Session æ—¶è§¦å‘äº‹ä»¶
+	* @param Result è¿”å›ç»“æœ
 	*/
 	DECLARE_EVENT_OneParam(AHS_GameSession, FOnJoinSessionComplete, EOnJoinSessionCompleteResult::Type /*Result*/);
 	FOnJoinSessionComplete JoinSessionCompleteEvent;
 
 	/**
-	* µ±ËÑË÷Íê³ÉÊ±´¥·¢ÊÂ¼ş
-	* @param bWasSuccessful ÊÇ·ñ³É¹¦
+	* å½“æœç´¢å®Œæˆæ—¶è§¦å‘äº‹ä»¶
+	* @param bWasSuccessful æ˜¯å¦æˆåŠŸ
 	*/
 	DECLARE_EVENT_OneParam(AHS_GameSession, FOnFindSessionsComplete, bool /*bWasSuccessful*/)
 	FOnFindSessionsComplete FindSessionCompleteEvent;
@@ -152,109 +152,109 @@ public:
 
 	AHS_GameSession();
 
-	// Ä¬ÈÏÔÊĞí¼ÓÈëµÄÍæ¼ÒÊıÁ¿
+	// é»˜è®¤å…è®¸åŠ å…¥çš„ç©å®¶æ•°é‡
 	static const int32 DEFAULT_NUM_PLAYERS = 8;
 
-	/** Ö÷³ÖÒ»¸öĞÂµÄÔÚÏßSession
+	/** ä¸»æŒä¸€ä¸ªæ–°çš„åœ¨çº¿Session
 	* 
-	* @param UserId			·¢ÆğÇëÇóµÄÓÃ»§
-	* @param SessionName	Session µÄÃû×Ö
-	* @param bIsLAN			ÊÇ·ñ¾ÖÓòÍø
-	* @param bIsPresence	ÊÇ·ñ¿É¼ûµÄSession
-	* @param MaxNumPlayers	×î´óÔÊĞíÓÃ»§¼ÓÈëÖµ
+	* @param UserId			å‘èµ·è¯·æ±‚çš„ç”¨æˆ·
+	* @param SessionName	Session çš„åå­—
+	* @param bIsLAN			æ˜¯å¦å±€åŸŸç½‘
+	* @param bIsPresence	æ˜¯å¦å¯è§çš„Session
+	* @param MaxNumPlayers	æœ€å¤§å…è®¸ç”¨æˆ·åŠ å…¥å€¼
 	* 
-	* @return ³É¹¦·µ»Øtrue£¬·ñÔò·µ»Øfalse
+	* @return æˆåŠŸè¿”å›trueï¼Œå¦åˆ™è¿”å›false
 	*/
-	bool HostSession(TSharedPtr<const FUniqueNetId> UserId, FName SessionName, const FString& GameType, const FString& MapName, bool bIsLAN, bool bIsPresence, int32 MaxNumPlayers);
+	bool HostSession(TSharedPtr<const FUniqueNetId> UserId, FName InSessionName, const FString& GameType, const FString& MapName, bool bIsLAN, bool bIsPresence, int32 MaxNumPlayers);
 	
-	/** Ö÷³ÖÒ»¸öĞÂµÄÌØÊâÉèÖÃµÄSession
-	* @param UserId			·¢ÆğÇëÇóµÄÓÃ»§
-	* @param SessionName	Session µÄÃû×Ö
-	* @param SessionSettings SessionµÄÉèÖÃ
+	/** ä¸»æŒä¸€ä¸ªæ–°çš„ç‰¹æ®Šè®¾ç½®çš„Session
+	* @param UserId			å‘èµ·è¯·æ±‚çš„ç”¨æˆ·
+	* @param SessionName	Session çš„åå­—
+	* @param SessionSettings Sessionçš„è®¾ç½®
 	*/
-	bool HostSession(const TSharedPtr<const FUniqueNetId> UserId, const FName SessionName, const FOnlineSessionSettings& SessionSettings);
+	bool HostSession(const TSharedPtr<const FUniqueNetId> UserId, const FName InSessionName, const FOnlineSessionSettings& SessionSettings);
 
 	/**
-	* ·¢ÏÖÔÚÏßSession
-	* @param UserId			·¢ÆğÇëÇóµÄÓÃ»§
-	* @param SessionName	Session µÄÃû×Ö
-	* @param bIsLAN			ÊÇ·ñ¾ÖÓòÍø
-	* @param bIsPresence	ÊÇ·ñ¿É¼ûµÄSession
+	* å‘ç°åœ¨çº¿Session
+	* @param UserId			å‘èµ·è¯·æ±‚çš„ç”¨æˆ·
+	* @param SessionName	Session çš„åå­—
+	* @param bIsLAN			æ˜¯å¦å±€åŸŸç½‘
+	* @param bIsPresence	æ˜¯å¦å¯è§çš„Session
 	*/
-	void FindSessions(TSharedPtr<const FUniqueNetId> UserId, FName SessionName, bool bIsLAN, bool bIsPresence);
+	void FindSessions(TSharedPtr<const FUniqueNetId> UserId, FName InSessionName, bool bIsLAN, bool bIsPresence);
 
 	/**
-	* ÔÚËÑË÷½á¹ûÖĞ¼ÓÈëÆäÖĞÒ»¸ö
-	* @param UserId			·¢ÆğÇëÇóµÄÓÃ»§
-	* @param SessionName	Session µÄÃû×Ö
-	* @param SessionIndexSearchResults ËÑË÷½á¹ûµÄ±àºÅ
+	* åœ¨æœç´¢ç»“æœä¸­åŠ å…¥å…¶ä¸­ä¸€ä¸ª
+	* @param UserId			å‘èµ·è¯·æ±‚çš„ç”¨æˆ·
+	* @param SessionName	Session çš„åå­—
+	* @param SessionIndexSearchResults æœç´¢ç»“æœçš„ç¼–å·
 	*
-	* @return ³É¹¦·µ»Øtrue£¬·ñÔò·µ»Øfalse
+	* @return æˆåŠŸè¿”å›trueï¼Œå¦åˆ™è¿”å›false
 	*/
-	bool JoinSession(TSharedPtr<const FUniqueNetId> UserId, FName SessionName, int32 SessionIndexSearchResults);
+	bool JoinSession(TSharedPtr<const FUniqueNetId> UserId, FName InSessionName, int32 SessionIndexSearchResults);
 
 	/**
-	* Í¨¹ıËÑË÷¼ÓÈëSession
-	* @param SessionName	Session µÄÃû×Ö
-	* @param SearchResult	¼ÓÈëµÄSession
+	* é€šè¿‡æœç´¢åŠ å…¥Session
+	* @param SessionName	Session çš„åå­—
+	* @param SearchResult	åŠ å…¥çš„Session
 	*
-	* @return ³É¹¦·µ»Øtrue£¬·ñÔò·µ»Øfalse
+	* @return æˆåŠŸè¿”å›trueï¼Œå¦åˆ™è¿”å›false
 	*/
-	bool JoinSession(TSharedPtr<const FUniqueNetId> UserId, FName SessionName, const FOnlineSessionSearchResult& SerachResult);
+	bool JoinSession(TSharedPtr<const FUniqueNetId> UserId, FName InSessionName, const FOnlineSessionSearchResult& SerachResult);
 
-	/* @return Èç¹ûÈÎºÎÒì²½¹¤×÷ÕıÔÚ½øĞĞ·µ»Øtrue£¬ ·ñÔò·µ»Øfalse*/
+	/* @return å¦‚æœä»»ä½•å¼‚æ­¥å·¥ä½œæ­£åœ¨è¿›è¡Œè¿”å›trueï¼Œ å¦åˆ™è¿”å›false*/
 	bool IsBusy() const;
 
 	/**
-	* »ñÈ¡µ±Ç°ËÑË÷½á¹û×´Ì¬
-	* @param SearchResultIdx ·ÃÎÊµ±Ç°ËÑË÷½á¹ûµÄidx
-	* @param NumSearchResults ÔÚFindGame£¨£©ÖĞ×ÜËÑË÷Á¿
+	* è·å–å½“å‰æœç´¢ç»“æœçŠ¶æ€
+	* @param SearchResultIdx è®¿é—®å½“å‰æœç´¢ç»“æœçš„idx
+	* @param NumSearchResults åœ¨FindGameï¼ˆï¼‰ä¸­æ€»æœç´¢é‡
 	*
-	* @return ËÑË÷½á¹û×´Ì¬²éÑ¯
+	* @return æœç´¢ç»“æœçŠ¶æ€æŸ¥è¯¢
 	*/
 	EOnlineAsyncTaskState::Type GetSearchResultStatus(int32& SearchResultIdx, int32& NumSearchResults);
 
 	/**
-	* »ñÈ¡ËÑË÷½á¹û
-	* @return »ñÈ¡ËÑË÷½á¹û
+	* è·å–æœç´¢ç»“æœ
+	* @return è·å–æœç´¢ç»“æœ
 	*/
 	const TArray<FOnlineSessionSearchResult>& GetSearchResults() const;
 
 	/**
-	* @return µ±´´½¨¹«¿ªsession Ê±´¥·¢Î¯ÍĞ
+	* @return å½“åˆ›å»ºå…¬å¼€session æ—¶è§¦å‘å§”æ‰˜
 	*/
 	FOnCreatePresenceSessionComplete & OnCreatePresenceSessionComplete() { return CreatePresenceSessionCompleteEvent; }
 
 	/**
-	* @return µ±¼ÓÈësession Ê±´¥·¢Î¯ÍĞ
+	* @return å½“åŠ å…¥session æ—¶è§¦å‘å§”æ‰˜
 	*/
 	FOnJoinSessionComplete& OnJoinSessionComplete() { return JoinSessionCompleteEvent; }
 
 	/**
-	* @return µ±ËÑË÷session Íê³ÉÊ±´¥·¢Î¯ÍĞ
+	* @return å½“æœç´¢session å®Œæˆæ—¶è§¦å‘å§”æ‰˜
 	*/
 	FOnFindSessionsComplete& OnFindSessionsComplete() { return FindSessionCompleteEvent; }
 
 	/**
-	* ¿ªÊ¼Æ¥Åä¾ä±ú
+	* å¼€å§‹åŒ¹é…å¥æŸ„
 	*/
 	virtual void HandleMatchHasStarted() override;
 
 	/**
-	* Æ¥Åä½áÊøÊ±µÄ¾ä±ú
+	* åŒ¹é…ç»“æŸæ—¶çš„å¥æŸ„
 	*/
 	virtual void HandleMatchHasEnded() override;
 
 	/**
-	* ÔÚ¸ø¶¨µÄSession ÖĞ·µ»ØSession URL£¨×÷Îª¿Í»§¶Ë£©
-	* @param ControllerId Æô¶¯Session travel µÄ¿ØÖÆÆ÷
-	* @param SessionName Session travel µÄÃû×Ö
+	* åœ¨ç»™å®šçš„Session ä¸­è¿”å›Session URLï¼ˆä½œä¸ºå®¢æˆ·ç«¯ï¼‰
+	* @param ControllerId å¯åŠ¨Session travel çš„æ§åˆ¶å™¨
+	* @param SessionName Session travel çš„åå­—
 	*
-	* @return ³É¹¦·µ»Øtrue£¬Ê§°Ü·µ»Øfalse
+	* @return æˆåŠŸè¿”å›trueï¼Œå¤±è´¥è¿”å›false
 	*/
-	bool TravelToSession(int32 ControllerId, FName SessionName);
+	bool TravelToSession(int32 ControllerId, FName InSessionName);
 
-	// ¸÷ÖÖ×¢²áÎ¯ÍĞµÄ¾ä±ú
+	// å„ç§æ³¨å†Œå§”æ‰˜çš„å¥æŸ„
 	FDelegateHandle OnStartSessionCompleteDelegateHandle;
 	FDelegateHandle OnCreateSessionCompleteDelegateHandle;
 	FDelegateHandle OnDestroySessionCompleteDelegateHandle;
