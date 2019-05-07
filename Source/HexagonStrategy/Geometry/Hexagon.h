@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Components/StaticMeshComponent.h"
+#include "Components/SceneComponent.h"
 #include "Hexagon.generated.h"
 
 class AHexagon;

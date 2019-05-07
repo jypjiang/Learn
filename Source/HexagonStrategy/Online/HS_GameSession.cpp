@@ -51,10 +51,10 @@ void AHS_GameSession::OnStartOnlineGameComplete(FName InSessionName, bool bWasSu
 
 	if (bWasSuccessful)
 	{
-		for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It)
-		{
-			// 待定
-		}
+		//for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It)
+		//{
+		//	// 待定
+		//}
 	}
 }
 
@@ -370,10 +370,10 @@ void AHS_GameSession::HandleMatchHasEnded()
 		if (Sessions.IsValid() && (Sessions->GetNamedSession(NAME_GameSession) != nullptr))
 		{
 			// 告诉客户端结束了
-			for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It)
-			{
-				// 待定
-			}
+			//for (FConstPlayerControllerIterator It = GetWorld()->GetPlayerControllerIterator(); It; ++It)
+			//{
+			//	// 待定
+			//}
 
 			// 服务器处理
 			UE_LOG(LogTemp, Warning, TEXT("Ending session %s on server"), *FName(NAME_GameSession).ToString());

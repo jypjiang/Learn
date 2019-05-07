@@ -7,8 +7,10 @@ public class HexagonStrategy : ModuleRules
 	public HexagonStrategy(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+
+        PrivatePCHHeaderFile = "HexagonStrategy.h";
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore","OnlineSubsystem","OnlineSubsystemUtils","GameplayTasks","AIModule" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore","OnlineSubsystem","OnlineSubsystemUtils","AIModule" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "SlateCore","Slate","GameplayAbilities","GameplayTags","GameplayTasks"});
 

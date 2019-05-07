@@ -1,9 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "HexOnlineSessionClient.h"
 #include "HexagonStrategy.h"
 #include "HS_GameInstance.h"
-
+#include "Util/PrintHelper.h"
 
 
 void UHexOnlineSessionClient::OnSessionUserInviteAccepted(const bool bWasSuccess, const int32 ControllerId, TSharedPtr< const FUniqueNetId > UserId, const FOnlineSessionSearchResult & InviteResult)

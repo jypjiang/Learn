@@ -1,9 +1,13 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "HS_GameInstance.h"
 #include "HexagonStrategy.h"
 #include "OnlineSubsystem.h"
 #include "Online/HexOnlineSessionClient.h"
+#include "Engine/LocalPlayer.h"
+#include "Util/ConvertUtil.h"
+#include "Util/PrintHelper.h"
+#include "Engine/LocalPlayer.h"
 
 UHS_GameInstance* UHS_GameInstance::GameInstance = nullptr;
 

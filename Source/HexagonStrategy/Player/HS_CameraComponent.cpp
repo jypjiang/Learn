@@ -1,8 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "HS_CameraComponent.h"
 #include "HS_SpectatorPawnMovement.h"
 #include "GameFramework/SpectatorPawn.h"
+#include "GameFramework/PlayerController.h"
 
 UHS_CameraComponent::UHS_CameraComponent()
 {
