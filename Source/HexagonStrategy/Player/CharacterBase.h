@@ -85,8 +85,8 @@ public:
 	UPROPERTY(BlueprintReadOnly, Replicated, Category = "CharacterBase")
 	int32 Hurt;
 
-	UPROPERTY(BlueprintReadOnly, Replicated, Category = "CharacterBase")
-	ESkillType SkillType;
+	//UPROPERTY(BlueprintReadOnly, Replicated, Category = "CharacterBase")
+	//ESkillType SkillType;
 	
 	UPROPERTY(EditAnywhere, Replicated, Category = "CharacterBase")
 	int32 CharacterLevel;
@@ -137,5 +137,5 @@ public:
 
 	void AddStartupGameplayAbilities();
 
-
+	void RemoveStartupGameplayAbilities();
 };

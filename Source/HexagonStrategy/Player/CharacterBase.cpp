@@ -116,6 +116,34 @@ void ACharacterBase::AddStartupGameplayAbilities()
 	}
 }
 
+void ACharacterBase::RemoveStartupGameplayAbilities()
+{
+	check(GameplayAbilityComp);
+
+	if (Role == ROLE_Authority && bAbilitiesInitialized)
+	{
+		TArray<FGameplayAbilitySpecHandle> AbilitiesToRemove;
+		for (const FGameplayAbilitySpec& Spec : GameplayAbilityComp->GetActivatableAbilities())
+		{
+			if ((Spec.SourceObject == this) && GameplayAbilities.Contains(Spec.Ability->GetClass()))
+			{
+				AbilitiesToRemove.Add(Spec.Handle);
+			}
+		}
+
+		for (int32 i = 0; i < AbilitiesToRemove.Num(); i++)
+		{
+			GameplayAbilityComp->ClearAbility(AbilitiesToRemove[i]);
+		}
+
+		FGameplayEffectQuery Query;
+		Query.EffectSource = this;
+		GameplayAbilityComp->RemoveActiveEffects(Query);
+
+		bAbilitiesInitialized = false;
+	}
+}
+
 void ACharacterBase::ServerAttack_Implementation(ACharacterBase* Emeny)
 {
 	Attack(Emeny);
@@ -168,7 +196,9 @@ bool ACharacterBase::SetCharacterLevel(int32 NewLevel)
 {
 	if (CharacterLevel != NewLevel && NewLevel)
 	{
+
 		CharacterLevel = NewLevel;
+		AddStartupGameplayAbilities();
 		return true;
 	}
 	return false;
@@ -182,5 +212,5 @@ void ACharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME_CONDITION(ACharacterBase, ItemNum, COND_InitialOnly);
 	DOREPLIFETIME_CONDITION(ACharacterBase, HP, COND_InitialOnly);
 	DOREPLIFETIME_CONDITION(ACharacterBase, Hurt, COND_InitialOnly);
-	DOREPLIFETIME_CONDITION(ACharacterBase, SkillType, COND_InitialOnly);
+	//DOREPLIFETIME_CONDITION(ACharacterBase, SkillType, COND_InitialOnly);
 }
