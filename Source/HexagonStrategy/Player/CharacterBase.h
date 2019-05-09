@@ -7,7 +7,7 @@
 #include "Geometry/Hexagon.h"
 #include "HS_GameInstance.h"
 #include "Player/Skill/HSGameplayAbility.h"
-#include "Player/Skill/SkillConfig.h"
+#include "Player/Skill/HSAttributeSet.h"
 #include "Player/Skill/HSAbilitySystemComponent.h"
 #include "CharacterBase.generated.h"
 
@@ -97,6 +97,9 @@ public:
 	UPROPERTY()
 	int32 bAbilitiesInitialized;
 
+	UPROPERTY()
+	UHSAttributeSet* AttributeSet;
+
 public:
 
 	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category = "CharacterBase")
@@ -125,6 +128,15 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
 	virtual bool SetCharacterLevel(int32 NewLevel);
+
+	UFUNCTION(BlueprintCallable)
+	virtual float GetHealth() const;
+
+	UFUNCTION(BlueprintCallable)
+	virtual float GetMaxHealth() const;
+
+	UFUNCTION(BlueprintCallable)
+	virtual float GetMoveSpeed() const;
 
 	// 是否在准备阶段
 	bool IsReadyState();

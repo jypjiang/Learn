@@ -204,6 +204,21 @@ bool ACharacterBase::SetCharacterLevel(int32 NewLevel)
 	return false;
 }
 
+float ACharacterBase::GetHealth() const
+{
+	return AttributeSet->GetHealth();
+}
+
+float ACharacterBase::GetMaxHealth() const
+{
+	return AttributeSet->GetMaxHealth();
+}
+
+float ACharacterBase::GetMoveSpeed() const
+{
+	return AttributeSet->GetMoveSpeed();
+}
+
 void ACharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
