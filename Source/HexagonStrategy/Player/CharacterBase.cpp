@@ -21,7 +21,7 @@ ACharacterBase::ACharacterBase()
 	HP = 100;
 	Hurt = 20;
 	bAbilitiesInitialized = false;
-
+	
 }
 
 // Called when the game starts or when spawned
